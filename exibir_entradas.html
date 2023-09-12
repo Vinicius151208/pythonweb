@@ -13,7 +13,7 @@
         <li>
             <h2>{{ entrada.titulo }}</h2>
             {{ entrada.texto|safe }}
-            <a href="{{ url_for('exibir_entrada', id=loop.revindex) }}"><h2>{{ entrada.titulo }}</h2></a>
+            <a href="{{ url_for('exibir_entradas', id=loop.revindex) }}"><h2>{{ entrada.titulo }}</h2></a>
             {{ entrada.texto |safe | truncate(140) }}
         </li>
         {% else %}

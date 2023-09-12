@@ -13,22 +13,34 @@ DATABASE = "banco.bd"
 def conectar ():
     return sqlite3.connect(DATABASE)
 
-posts = [
-    {
-        "titulo": "Minha primeira postagem",
-        "texto": "teste"
-    },
-    {
-        "titulo": "Segundo Post",
-        'texto': "outro teste"
-    }
-]
+@app.before_request
+def before_request():
+    g.bd = conectar()
+
+@app.teardown_request
+def teardown_request(f):
+    g.bd.close()
+
+
+
 
 @app.route('/')
 def exibir_entradas():
-    entradas = posts # Mock das postagens
-    entradas = posts[::-1] # Mock das postagens
-    return render_template('exibir_entradas.html', entradas=entradas)
+    #entradas = posts # Mock das postagens
+    #entradas = posts[::-1] # Mock das postagens
+
+   
+     sql = "SELECT titulo, texto, data_criacao FROM posts ORDER BY id DESC"
+     resultado = g.bd.execute(sql)
+
+    entradas = [
+    {"titulo":"Primeiro Titulo", "texto":"Primeiro", "data_criacao":"11/09/2023"},
+    {"titulo":"Segundo Titulo", "texto":"Segundo", "data_criacao":"12/09/22023"}
+        ]
+
+
+
+return render_template('exibir_entradas.html', entradas=entradas)
 
 @app.route('/login', methods=["GET", "POST"])
 @@ -29,3 +19,28 @@ def login():
